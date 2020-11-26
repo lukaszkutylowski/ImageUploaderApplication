@@ -31,39 +31,39 @@ It is a web application that uses REST API and Java library to upload photos to 
 ### Application Event Listener is launched when the entire application is started and creates two users: AdminJan and UserJan. The password is encrypted with BCryptPasswordEncoder and saved in the MySQL database.
 
 ```java
-	@Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+@Bean
+public PasswordEncoder passwordEncoder() {
+	return new BCryptPasswordEncoder();
+}
 
-	@EventListener(ApplicationReadyEvent.class)
-    public void get() {
-        AppUser appUser = new AppUser("UserJan", passwordEncoder()
-                .encode("User123"), "ROLE_USER");
-        AppUser appAdmin = new AppUser("AdminJan", passwordEncoder()
-                .encode("Admin123"), "ROLE_ADMIN");
-        appUserRepo.save(appUser);
-        appUserRepo.save(appAdmin);
-    }
+@EventListener(ApplicationReadyEvent.class)
+public void get() {
+	AppUser appUser = new AppUser("UserJan", passwordEncoder()
+			.encode("User123"), "ROLE_USER");
+	AppUser appAdmin = new AppUser("AdminJan", passwordEncoder()
+			.encode("Admin123"), "ROLE_ADMIN");
+	appUserRepo.save(appUser);
+	appUserRepo.save(appAdmin);
+}
 ```
 
 ### Endpoint routing is implemented with Spring Security. The / upload path is available to the Admin user; path / gallery is available to User, while home page, login and logout is available to everyone.
 
 ```java
 @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers("/upload").hasRole("ADMIN")
-                .antMatchers("/gallery").hasRole("USER")
-                .antMatchers("/").permitAll()
-                .antMatchers("/logout").permitAll()
-                .and()
-                .formLogin().permitAll()
-                .and()
-                .csrf().disable()
-                .httpBasic()
-                ;
-    }
+protected void configure(HttpSecurity http) throws Exception {
+	http.authorizeRequests()
+			.antMatchers("/upload").hasRole("ADMIN")
+			.antMatchers("/gallery").hasRole("USER")
+			.antMatchers("/").permitAll()
+			.antMatchers("/logout").permitAll()
+			.and()
+			.formLogin().permitAll()
+			.and()
+			.csrf().disable()
+			.httpBasic()
+			;
+}
 ```
 
 ### When the application is started, two records are created in the 'app_user' table with information about the two types of users.
