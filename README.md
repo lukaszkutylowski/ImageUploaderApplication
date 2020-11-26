@@ -47,7 +47,7 @@ public void get() {
 }
 ```
 
-### Endpoint routing is implemented with Spring Security. The / upload path is available to the Admin user; path / gallery is available to User, while home page, login and logout is available to everyone.
+### Endpoint permission is implemented with Spring Security. The / upload path is available to the Admin user; path / gallery is available to User, while home page, login and logout is available to everyone.
 
 ```java
 @Override
